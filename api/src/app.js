@@ -2,7 +2,10 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import cors from 'cors';
 import connectDB from './config/dbConfig';
+import * as dotenv  from "dotenv"
 // import pdfRoutes from './routes/pdfRoutes';
+
+dotenv.config()
 
 const app = express();
 
