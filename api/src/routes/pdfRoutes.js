@@ -1,6 +1,6 @@
 import { Router } from 'express';
-import upload from '../middlewares/uploadMiddleware';
-import pdfController from  '../controllers/pdfController';
+import upload from '../middlewares/uploadMiddleware.js';
+import pdfController from  '../controllers/pdfController.js';
 
 const router =Router();
 

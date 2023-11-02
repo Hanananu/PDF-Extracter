@@ -1,9 +1,10 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import cors from 'cors';
-import connectDB from './config/dbConfig';
+import connectDB from './config/dbConfig.js';
 import * as dotenv  from "dotenv"
-// import pdfRoutes from './routes/pdfRoutes';
+import userRoutes from "./routes/userRoutes.js"
+import pdfRoutes from './routes/pdfRoutes.js';
 
 dotenv.config()
 
@@ -16,6 +17,8 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // Routes
-// app.use('/api/pdf', pdfRoutes);
+
+app.use('/api/user', userRoutes);
+app.use('/api/pdf', pdfRoutes);
 
 export default app;

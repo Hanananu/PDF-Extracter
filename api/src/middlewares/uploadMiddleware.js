@@ -1,6 +1,6 @@
 import multer from "multer"
 import { resolve } from 'path';
-import { generateUniqueFileName } from "../utils/fileUtils";
+import { generateUniqueFileName } from "../utils/fileUtils.js";
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {

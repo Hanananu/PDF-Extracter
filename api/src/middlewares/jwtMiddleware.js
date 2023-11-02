@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken';
-import User from '../models/userModel';
+import User from '../models/userModel.js';
 
 const generateAuthToken = async (user) => {
   const token = jwt.sign({ _id: user._id.toString() },process.env.SEC_KEY);

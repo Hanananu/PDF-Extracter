@@ -1,4 +1,4 @@
-import { generateUniqueFileName } from "../utils/fileUtils";
+import { generateUniqueFileName } from "../utils/fileUtils.js";
 
 const pdfController = {
   uploadPDF: (req, res) => {

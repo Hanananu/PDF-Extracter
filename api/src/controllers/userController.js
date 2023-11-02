@@ -1,5 +1,5 @@
-import User from '../models/userModel';
-import { generateAuthToken } from '../middlewares/jwtMiddleware';
+import User from '../models/userModel.js';
+import { generateAuthToken } from '../middlewares/jwtMiddleware.js';
 
 const userController ={
 
