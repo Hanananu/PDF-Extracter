@@ -6,7 +6,7 @@ import { BACKEND_URL } from '../constants/constant';
 import { toast } from 'react-toastify';
 
 const FileUploadForm = () => {
-  const fileInputRef = useRef<HTMLInputElement>(null);
+  const fileInputRef = useRef(null);
   const controllerRef = useRef(new AbortController());
   const router = useNavigate();
 

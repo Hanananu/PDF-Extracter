@@ -1,4 +1,10 @@
 import { generateUniqueFileName } from "../utils/fileUtils.js";
+import {resolve} from "path"
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 const pdfController = {
   uploadPDF: (req, res) => {
@@ -9,9 +15,7 @@ const pdfController = {
 
       const destFileName = generateUniqueFileName("pdf");
       const destFilePath = resolve(
-        __dirname,
-        "../../../public",
-        "uploads",
+        __dirname, '../../../api','public', 'uploads',
         destFileName
       );
 

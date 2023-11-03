@@ -2,7 +2,7 @@ import { useRouteError,Link } from "react-router-dom";
 import { useState } from "react";
 
 const ErrorPage = () => {
-  const [{ error }] = useState<any>(useRouteError());
+  const [{ error }] = useState(useRouteError());
 
   return (
 <section className="">
