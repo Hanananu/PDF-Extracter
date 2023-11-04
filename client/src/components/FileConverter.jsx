@@ -1,17 +1,19 @@
 import React, { useEffect, useMemo, useState, useRef } from "react";
+import ExtractButton from "./ExtractButton";
 import { DownloadIcon, ViewIcon } from "./icons/ImageTopIcon";
 
 var pdfjsLib = window["pdfjs-dist/build/pdf"];
 pdfjsLib.GlobalWorkerOptions.workerSrc = "/js/pdf.worker.js";
 
 function FileConverter({ pdfUrl, fileName }) {
+  
   const myRef = useRef();
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [imageUrls, setImageUrls] = useState([]);
   const [numOfPages, setNumOfPages] = useState(0);
   const [selectedImage, setSelectedImage] = useState(null);
-  const [extractChecked, setExtractChecked] = useState(false);
+  const [selectedPages, setSelectedPages] = useState([]);
 
   // Cleanup loading state when imageUrls change
   useEffect(() => {
@@ -55,7 +57,7 @@ function FileConverter({ pdfUrl, fileName }) {
     const canvas = document.createElement("canvas");
     canvas.setAttribute("class", "canv");
     const pdf = await pdfjsLib.getDocument({ data }).promise;
-  
+
     for (let i = 1; i <= pdf.numPages; i++) {
       var page = await pdf.getPage(i);
       var viewport = page.getViewport({ scale: 1.5 });
@@ -69,11 +71,11 @@ function FileConverter({ pdfUrl, fileName }) {
       let img = canvas.toDataURL("image/png");
       imagesList.push(img);
     }
-  
+
     setNumOfPages(pdf.numPages);
     setImageUrls(imagesList); // Clear previous images and set new ones
   };
-  
+
   // Scroll to the bottom when imageUrls change
   useEffect(() => {
     myRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -90,11 +92,18 @@ function FileConverter({ pdfUrl, fileName }) {
     handleClose();
   };
 
-  // Handle extraction button click
-  const handleExtract = () => {
-    // TODO: Add your API call logic for extraction here
-    console.log("Extracting...");
+  // Handle checkbox change
+  const handleCheckboxChange = (index) => {
+    const isSelected = selectedPages.includes(index);
+    if (isSelected) {
+      setSelectedPages((prevSelected) =>
+        prevSelected.filter((page) => page !== index)
+      );
+    } else {
+      setSelectedPages((prevSelected) => [...prevSelected, index]);
+    }
   };
+ 
 
   return (
     <div
@@ -114,12 +123,12 @@ function FileConverter({ pdfUrl, fileName }) {
                 {imageUrls.map((url, index) => (
                   <div
                     key={index}
-                    className="relative w-48 h-48 px-2 py-2 opacity-100"
+                    className="relative w-44 h-56 px-2 py-2 opacity-100  bg-blue-300 hover:bg-blue-400 shadow-lg  rounded"
                   >
                     <img
                       src={url}
                       alt={`Page ${index + 1}`}
-                      className="w-full h-full object-cover shadow-md border border-gray-300 rounded"
+                      className="w-full h-full object-cover rounded-md"
                     />
                     <div className="absolute top-1 right-1 space-x-1">
                       {/* View button */}
@@ -137,27 +146,26 @@ function FileConverter({ pdfUrl, fileName }) {
                         <DownloadIcon height={7} width={7} />
                       </button>
                     </div>
-                    <div className="absolute top-1 left-1 space-x-2">
+                    <div className="absolute top-1 left-1 space-x-2  rounded-full">
                       {/* Check box */}
                       <input
                         type="checkbox"
-                        checked={extractChecked}
-                        className="w-4 h-4 text-black bg-gray-600 round-full text-center"
-                        onChange={() => setExtractChecked(!extractChecked)}
+                        checked={selectedPages.includes(index + 1)}
+                        className="w-5 h-5 text-black  text-center px-2 py-2 rounded-full"
+                        onChange={() => handleCheckboxChange(index + 1)}
                       />
                     </div>
+                    {/* {Page Number} */}
+                    <h4 className="text-center font-bold text-sm py-1">
+                      {index + 1}
+                    </h4>
                   </div>
                 ))}
               </div>
               {/* Checkbox for ImageTopIcon */}
               <div className="mt-4">
                 {/* Extract button */}
-                <button
-                  onClick={handleExtract}
-                  className="btn-bg px-4 py-2 rounded-full"
-                >
-                  Extract
-                </button>
+                <ExtractButton selectedPages={selectedPages} fileName={fileName}/>
               </div>
             </>
           )}
