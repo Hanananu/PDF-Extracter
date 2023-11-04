@@ -6,6 +6,6 @@ const router =Router();
 
 router.post('/upload', upload.single('pdf'),pdfController.uploadPDF);
 router.get('/get/:fileName',pdfController.getPDF);
-// router.post('/extract', extractPages);
+router.post('/extract',pdfController.extractPages);
 
 export default router

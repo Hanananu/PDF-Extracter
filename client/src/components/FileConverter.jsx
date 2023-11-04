@@ -7,7 +7,6 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = "/js/pdf.worker.js";
 
 function FileConverter({ pdfUrl, fileName }) {
   
-  const myRef = useRef();
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [imageUrls, setImageUrls] = useState([]);
@@ -76,10 +75,6 @@ function FileConverter({ pdfUrl, fileName }) {
     setImageUrls(imagesList); // Clear previous images and set new ones
   };
 
-  // Scroll to the bottom when imageUrls change
-  useEffect(() => {
-    myRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
-  }, [imageUrls]);
 
   // Download image on button click
   const downloadImage = (url, index) => {
@@ -103,12 +98,12 @@ function FileConverter({ pdfUrl, fileName }) {
       setSelectedPages((prevSelected) => [...prevSelected, index]);
     }
   };
- 
+  
+
 
   return (
     <div
       className="px-2 py-4 text-center overflow-y-auto scrollbar-hide max-h-[480px] "
-      ref={myRef}
     >
       {loading ? (
         <div className="text-4xl text-black">Loading...</div>
@@ -165,7 +160,7 @@ function FileConverter({ pdfUrl, fileName }) {
               {/* Checkbox for ImageTopIcon */}
               <div className="mt-4">
                 {/* Extract button */}
-                <ExtractButton selectedPages={selectedPages} fileName={fileName}/>
+              {selectedPages.length>0 && <ExtractButton selectedPages={selectedPages} fileName={fileName}/> }
               </div>
             </>
           )}

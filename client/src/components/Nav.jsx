@@ -25,7 +25,7 @@ const Navbar = () => {
   ];
 
   return (
-    <nav className="fixed top-0 left-0 right-0 bg-gray-100 opacity-100 shadow-md">
+    <nav className="fixed top-0 left-0 right-0 bg-gray-100 opacity-100 shadow-md z-50">
       <div className="flex flex-wrap items-center justify-between  px-10 py-5">
         <Link
           to={"/"}

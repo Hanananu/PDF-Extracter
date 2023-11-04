@@ -1,46 +1,58 @@
-import React, { useState, useEffect } from 'react';
-import { DocumentIcon } from '@heroicons/react/24/solid';
+import React, { useState, useEffect } from "react";
+import { DocumentIcon } from "@heroicons/react/24/solid";
+import { BACKEND_URL } from "../constants/constant";
+import { toast } from "react-toastify";
+import { useNavigate } from 'react-router-dom'
+import { useBlob } from "../context/BlobContext";
+
 
 const ExtractButton = ({ selectedPages, fileName }) => {
+  const router =useNavigate()
+  const pdfName = `${fileName}.pdf`;
+  const pages = selectedPages;
+  const {setBlob}=useBlob()
 
   // State to manage loading state
   const [loading, setLoading] = useState(false);
-  console.log(selectedPages,fileName);
 
   // Function to handle extraction
-  const handleExtract = async ({selectedPages,fileName}) => {
+  const handleExtract = async () => {
     // Create an AbortController to handle potential request abort
     const controller = new AbortController();
     const signal = controller.signal;
 
     try {
       setLoading(true);
-    //   // Send a POST request to the extraction API
-    //   const response = await fetch('/your-extraction-api-endpoint', {
-    //     method: 'POST',
-    //     headers: {
-    //       'Content-Type': 'application/json',
-    //     },
-    //     body: JSON.stringify({
-    //       selectedPages,
-    //       fileName,
-    //     }),
-    //     signal,
-    //   });
+      // Send a POST request to the extraction API
+      const response = await fetch(`${BACKEND_URL}/pdf/extract`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          pages,
+          pdfName,
+        }),
+        signal,
+      });
 
-    //   // Parse the response
-    //   const data = await response.json();
-    //   console.log(data);
-
-    //   // Trigger download of the new PDF file
-    //   window.location.href = `/your-download-api-endpoint/${data.newPdfFileName}`;
-    // } catch (error) {
-    //   // Handle errors, including potential abort
-    //   if (error.name === 'AbortError') {
-    //     console.log('Request was aborted');
-    //   } else {
-    //     console.error('Error during extraction:', error);
-    //   }
+      if (response.ok) {
+        toast.success("Extraction successful!");
+        // Parse the response
+        const blob = await response.blob();
+        const pdfBlobUrl = URL.createObjectURL(blob);
+        setBlob(pdfBlobUrl); // Set Blob URL in the context
+        router(`/extracted-pdf`)
+      } else {
+        toast.error("Extraction failed. Please try again.");
+      }
+    } catch (error) {
+      // Handle errors, including potential abort
+      if (error.name === "AbortError") {
+        console.log("Request was aborted");
+      } else {
+        toast.error('An error occurred during extraction. Please try again.');
+      }
     } finally {
       // Reset loading state
       setLoading(false);
@@ -54,7 +66,7 @@ const ExtractButton = ({ selectedPages, fileName }) => {
         onClick={handleExtract}
         disabled={loading}
         className={`btn-bg px-4 py-2 rounded-full ${
-          loading ? 'opacity-50 cursor-not-allowed' : ''
+          loading ? "opacity-50 cursor-not-allowed" : ""
         } sm:px-6 sm:py-3`}
       >
         {loading ? (

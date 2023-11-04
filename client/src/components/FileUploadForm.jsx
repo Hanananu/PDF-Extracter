@@ -42,7 +42,7 @@ const FileUploadForm = () => {
 
         if (response.ok) {
           toast.success('File uploaded successfully');
-          router(`viewpdf/${data?.fileWithOutExtension}`);
+          router(`view-pdf/${data?.fileWithOutExtension}`);
         } else {
           throw new Error(`File upload failed: ${data.message}`);
         }

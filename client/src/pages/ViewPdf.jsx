@@ -1,10 +1,10 @@
-import React, { useState, useEffect, lazy, Suspense } from 'react';
-import { useParams } from 'react-router-dom';
-import { BACKEND_URL } from '../constants/constant';
-import { toast, ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import React, { useState, useEffect, lazy, Suspense } from "react";
+import { useParams } from "react-router-dom";
+import { BACKEND_URL } from "../constants/constant";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
-const FileConverter = lazy(() => import('../components/FileConverter'));
+const FileConverter = lazy(() => import("../components/FileConverter"));
 
 const ViewPdf = () => {
   const { fileName } = useParams();
@@ -21,18 +21,21 @@ const ViewPdf = () => {
 
     const fetchPdf = async () => {
       try {
-        const response = await fetch(`${BACKEND_URL}/pdf/get/${fileName}.pdf`, { signal });
+        const response = await fetch(`${BACKEND_URL}/pdf/get/${fileName}.pdf`, {
+          signal,
+        });
 
         if (response.ok) {
           const blob = await response.blob();
           const pdfBlobUrl = URL.createObjectURL(blob);
           setPdfUrl(pdfBlobUrl);
+          console.log("form viewpdf", pdfBlobUrl);
         } else {
-          throw new Error('Failed to fetch PDF');
+          throw new Error("Failed to fetch PDF");
         }
       } catch (error) {
         if (controller.signal.aborted) {
-          console.log('Request was aborted');
+          console.log("Request was aborted");
         } else if (retries < maxRetries) {
           // If not aborted and retries are within limit, retry after a delay
           retries++;
@@ -40,6 +43,7 @@ const ViewPdf = () => {
         } else {
           // If retries exceed the limit, show an error toast
           toast.error('Failed to fetch PDF. Maximum retries reached.');
+          throw new Error("Maximum retries reached");
         }
       }
     };
@@ -52,12 +56,12 @@ const ViewPdf = () => {
   }, [fileName]);
 
   
+
   return (
     <div className="bg-gray-100 h-[480px] mt-20">
       <Suspense fallback={<div>Loading...</div>}>
         {pdfUrl && <FileConverter pdfUrl={pdfUrl} fileName={fileName} />}
       </Suspense>
-      <ToastContainer />
     </div>
   );
 };
