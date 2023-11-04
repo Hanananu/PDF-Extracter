@@ -1,36 +1,40 @@
-import React, { useEffect, useMemo, useState ,useRef} from "react";
-import { EyeIcon,CloudArrowDownIcon } from "@heroicons/react/24/solid";
-
+import React, { useEffect, useMemo, useState, useRef } from "react";
+import { DownloadIcon, ViewIcon } from "./icons/ImageTopIcon";
 
 var pdfjsLib = window["pdfjs-dist/build/pdf"];
-pdfjsLib.GlobalWorkerOptions.workerSrc =  "/js/pdf.worker.js";
+pdfjsLib.GlobalWorkerOptions.workerSrc = "/js/pdf.worker.js";
 
 function FileConverter({ pdfUrl, fileName }) {
-  
   const myRef = useRef();
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [imageUrls, setImageUrls] = useState([]);
   const [numOfPages, setNumOfPages] = useState(0);
   const [selectedImage, setSelectedImage] = useState(null);
+  const [extractChecked, setExtractChecked] = useState(false);
 
+  // Cleanup loading state when imageUrls change
   useEffect(() => {
     setLoading(false);
   }, [imageUrls]);
 
+  // Handle opening the image modal
   const handleClickOpen = (url, index) => {
     setSelectedImage({ url, index });
     setOpen(true);
   };
 
+  // Handle closing the image modal
   const handleClose = () => {
     setSelectedImage(null);
     setOpen(false);
   };
 
+  // Upload PDF URL and trigger rendering
   const UrlUploader = (url) => {
-    fetch(url).then((response) => {
-      response.blob().then((blob) => {
+    fetch(url)
+      .then((response) => response.blob())
+      .then((blob) => {
         let reader = new FileReader();
         reader.onload = (e) => {
           const data = atob(e.target.result.replace(/.*base64,/, ""));
@@ -38,12 +42,12 @@ function FileConverter({ pdfUrl, fileName }) {
         };
         reader.readAsDataURL(blob);
       });
-    });
   };
 
+  // Render PDF pages to images
   useMemo(() => {
     UrlUploader(pdfUrl);
-  }, []);
+  }, [pdfUrl]);
 
   const renderPage = async (data) => {
     setLoading(true);
@@ -51,6 +55,7 @@ function FileConverter({ pdfUrl, fileName }) {
     const canvas = document.createElement("canvas");
     canvas.setAttribute("class", "canv");
     const pdf = await pdfjsLib.getDocument({ data }).promise;
+  
     for (let i = 1; i <= pdf.numPages; i++) {
       var page = await pdf.getPage(i);
       var viewport = page.getViewport({ scale: 1.5 });
@@ -64,14 +69,17 @@ function FileConverter({ pdfUrl, fileName }) {
       let img = canvas.toDataURL("image/png");
       imagesList.push(img);
     }
-    setNumOfPages((e) => e + pdf.numPages);
-    setImageUrls((e) => [...e, ...imagesList]);
+  
+    setNumOfPages(pdf.numPages);
+    setImageUrls(imagesList); // Clear previous images and set new ones
   };
-
+  
+  // Scroll to the bottom when imageUrls change
   useEffect(() => {
     myRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
   }, [imageUrls]);
 
+  // Download image on button click
   const downloadImage = (url, index) => {
     const a = document.createElement("a");
     a.href = url;
@@ -82,8 +90,17 @@ function FileConverter({ pdfUrl, fileName }) {
     handleClose();
   };
 
+  // Handle extraction button click
+  const handleExtract = () => {
+    // TODO: Add your API call logic for extraction here
+    console.log("Extracting...");
+  };
+
   return (
-    <div className="px-2 py-4 text-center overflow-y-auto scrollbar-hide max-h-[480px] " ref={myRef}>
+    <div
+      className="px-2 py-4 text-center overflow-y-auto scrollbar-hide max-h-[480px] "
+      ref={myRef}
+    >
       {loading ? (
         <div className="text-4xl text-black">Loading...</div>
       ) : (
@@ -93,34 +110,55 @@ function FileConverter({ pdfUrl, fileName }) {
               <h4 className="text-2xl mb-4 text-black font-semibold">
                 Select Pages For Extracting - {numOfPages}
               </h4>
-              <div className="flex flex-wrap  gap-4 justify-center ">
-              {imageUrls.map((url, index) => (
-                <div
-                  key={index}
-                  className="relative w-48 h-48 px-2 py-2 opacity-100"
-                >
-                  <img
-                    src={url}
-                    alt={`Page ${index + 1}`}
-                    className="w-full h-full object-cover shadow-md border border-gray-300 rounded"
-                  />
-                  <div className="absolute top-1 right-1 space-x-1 ">
-                    <button
-                      onClick={() => handleClickOpen(url, index)}
-                      className="btn-bg p-2 "
-                    >
-                      <EyeIcon className="h-7 w-7 text-black bg-slate-300 rounded-full"/>
-                    </button>
-                    <button
-                      onClick={() => downloadImage(url, index)}
-                      className="btn-bg p-2 rounded-full "
-                    >
-                      <CloudArrowDownIcon className="h-7 w-7 text-black bg-slate-300 rounded-full"/>
-                    </button>
+              <div className="flex flex-wrap gap-4 justify-center">
+                {imageUrls.map((url, index) => (
+                  <div
+                    key={index}
+                    className="relative w-48 h-48 px-2 py-2 opacity-100"
+                  >
+                    <img
+                      src={url}
+                      alt={`Page ${index + 1}`}
+                      className="w-full h-full object-cover shadow-md border border-gray-300 rounded"
+                    />
+                    <div className="absolute top-1 right-1 space-x-1">
+                      {/* View button */}
+                      <button
+                        onClick={() => handleClickOpen(url, index)}
+                        className="btn-bg p-2"
+                      >
+                        <ViewIcon height={7} width={7} />
+                      </button>
+                      {/* Download button */}
+                      <button
+                        onClick={() => downloadImage(url, index)}
+                        className="btn-bg p-2 rounded-full"
+                      >
+                        <DownloadIcon height={7} width={7} />
+                      </button>
+                    </div>
+                    <div className="absolute top-1 left-1 space-x-2">
+                      {/* Check box */}
+                      <input
+                        type="checkbox"
+                        checked={extractChecked}
+                        className="w-4 h-4 text-black bg-gray-600 round-full text-center"
+                        onChange={() => setExtractChecked(!extractChecked)}
+                      />
+                    </div>
                   </div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+              {/* Checkbox for ImageTopIcon */}
+              <div className="mt-4">
+                {/* Extract button */}
+                <button
+                  onClick={handleExtract}
+                  className="btn-bg px-4 py-2 rounded-full"
+                >
+                  Extract
+                </button>
+              </div>
             </>
           )}
         </>
@@ -134,12 +172,14 @@ function FileConverter({ pdfUrl, fileName }) {
               className="w-96 h-96 object-fill"
             />
             <div className="mt-4 flex justify-end space-x-4">
+              {/* Cancel button */}
               <button
                 onClick={handleClose}
                 className="text-white bg-gray-500 px-4 py-2 rounded"
               >
                 Cancel
               </button>
+              {/* Download button */}
               <button
                 onClick={() =>
                   downloadImage(selectedImage.url, selectedImage.index)

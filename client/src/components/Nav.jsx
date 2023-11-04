@@ -30,7 +30,7 @@ const Navbar = () => {
         <Link
           to={"/"}
           className="font-semibold sm:text-4xl text-lg text-black"
-        >LOGO
+        >PDF FORGE
         </Link>
         <div className="mobile-menu block md:hidden">
           {isOpen ? (
