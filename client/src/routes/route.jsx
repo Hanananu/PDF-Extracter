@@ -1,51 +1,77 @@
-import App from "../App";
-import HomePage from "../pages/HomePage";
-import LoginPage from "../pages/LoginPage";
-import SignUpPage from "../pages/SignUpPage";
-import UserProfile from "../pages/UserProfile";
-import ViewPdf from "../pages/ViewPdf";
-import ErrorPage from "../pages/ErrorPage";
-import ExtractedPdf from "../pages/ExtractedPdf";
-import { BlobProvider } from "../context/BlobContext";
+import React, { lazy, Suspense } from 'react';
+import { BlobProvider } from '../context/BlobContext';
+import App from '../App';
+import ErrorPage from '../pages/ErrorPage';
+import Loader from '../components/Loader';
 
-export const clientRoutes = {
-  path: "/",
+
+const HomePage = lazy(() => import('../pages/HomePage'));
+const LoginPage = lazy(() => import('../pages/LoginPage'));
+const SignUpPage = lazy(() => import('../pages/SignUpPage'));
+const UserProfile = lazy(() => import('../pages/UserProfile'));
+const ViewPdf = lazy(() => import('../pages/ViewPdf'));
+const ExtractedPdf = lazy(() => import('../pages/ExtractedPdf'));
+
+const clientRoutes = {
+  path: '/',
   element: <App />,
   errorElement: <ErrorPage />,
   children: [
     {
-      path: "/",
-      element: <HomePage />,
-    },
-    {
-      path: "view-pdf/:fileName",
+      path: '/',
       element: (
-        <BlobProvider>
-          <ViewPdf />
-        </BlobProvider>
+        <Suspense fallback={<Loader loading={true} />}>
+          <HomePage />
+        </Suspense>
       ),
     },
     {
-      path: "extracted-pdf",
+      path: 'view-pdf/:fileName',
       element: (
-        <BlobProvider>
-          <ExtractedPdf />
-        </BlobProvider>
+        <Suspense fallback={<Loader loading={true}/>}>
+          <BlobProvider>
+            <ViewPdf />
+          </BlobProvider>
+        </Suspense>
       ),
     },
     {
-      path: "user/:username",
-      element: <UserProfile />,
+      path: 'extracted-pdf',
+      element: (
+        <Suspense fallback={<Loader loading={true} />}>
+          <BlobProvider>
+            <ExtractedPdf />
+          </BlobProvider>
+        </Suspense>
+      ),
+    },
+    {
+      path: 'user/:username',
+      element: (
+        <Suspense fallback={<div>Loading...</div>}>
+          <UserProfile />
+        </Suspense>
+      ),
     },
   ],
 };
 
-export const clientLogin = {
-  path: "/login",
-  element: <LoginPage />,
+const clientLogin = {
+  path: '/login',
+  element: (
+    <Suspense fallback={<div>Loading...</div>}>
+      <LoginPage />
+    </Suspense>
+  ),
 };
 
-export const clientRegister = {
-  path: "/register",
-  element: <SignUpPage />,
+const clientRegister = {
+  path: '/register',
+  element: (
+    <Suspense fallback={<div>Loading...</div>}>
+      <SignUpPage />
+    </Suspense>
+  ),
 };
+
+export { clientRoutes, clientLogin, clientRegister };

@@ -44,7 +44,7 @@ const readLocalPdf = async (filePath, pages) => {
 
         const fileStream = fs.createReadStream(tempFilePath);
 
-        fs.unlinkSync(filePath);
+        // fs.unlinkSync(filePath);
 
         return fileStream;
       }

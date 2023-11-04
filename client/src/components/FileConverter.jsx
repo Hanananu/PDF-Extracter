@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useState, useRef } from "react";
 import ExtractButton from "./ExtractButton";
 import { DownloadIcon, ViewIcon } from "./icons/ImageTopIcon";
 
+
 var pdfjsLib = window["pdfjs-dist/build/pdf"];
 pdfjsLib.GlobalWorkerOptions.workerSrc = "/js/pdf.worker.js";
 
