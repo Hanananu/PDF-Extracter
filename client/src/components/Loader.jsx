@@ -4,8 +4,8 @@ import { PacmanLoader } from 'react-spinners';
 const Loader = ({loading}) => {
   
   return (
-    <div className='h-screen text-center'>
-      <PacmanLoader color='#00abf0' size={25} loading={loading} />
+    <div className='h-[450px] flex items-center justify-center'>
+      <PacmanLoader color='#00abf0' size={35} loading={loading} />
     </div>
   );
 };

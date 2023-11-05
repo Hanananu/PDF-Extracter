@@ -29,7 +29,6 @@ const ViewPdf = () => {
           const blob = await response.blob();
           const pdfBlobUrl = URL.createObjectURL(blob);
           setPdfUrl(pdfBlobUrl);
-          console.log("form viewpdf", pdfBlobUrl);
         } else {
           throw new Error("Failed to fetch PDF");
         }
