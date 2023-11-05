@@ -10,7 +10,7 @@ PDF Forge is a web application that enables users to extract and manipulate PDF 
   - [Installation](#installation)
   - [Usage](#usage)
     - [Development](#development)  
-  - [Contributing](#contributing)
+  - [Apis](#apis)
   - [License](#license)
 
 ## Features
@@ -106,3 +106,44 @@ PDF Forge is a web application that enables users to extract and manipulate PDF 
 
    (Repeat the same process for access the UI , instead  cd api && npm start use cd clien && npm run dev.
    Access dev server at http://localhost:5173)
+
+
+# APIs
+
+This API provides endpoints for performing various operations on PDF files, including uploading, fetching, and extracting pages.
+
+## API Endpoints
+
+### 1. Upload a PDF File
+
+**Endpoint:** POST /api/pdf/upload
+
+**Description:**
+Upload a PDF file to the server.
+
+### 2. Fetch an Uploaded PDF File
+
+**Endpoint:** GET /api/pdf/:fileName
+
+
+**Description:**
+Fetch an uploaded PDF file.
+
+### 3. Extract Pages from PDF
+
+**Endpoint:**  POST /api/pdf/extract
+
+**Description:**
+Extract new PDFs from the original PDF by selecting specific pages.
+
+## Detailed API Documentation
+
+For detailed documentation on each API endpoint, including request and response formats, please refer to the [API Documentation](https://documenter.getpostman.com/view/20041063/2s9YXfa39S).
+
+
+# License
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+```   
+Feel free to adjust the content and formatting based on your specific needs.
+
