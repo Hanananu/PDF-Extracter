@@ -1,13 +1,15 @@
 // FileUploadForm Component: Handles the upload of PDF files and displays toast messages based on server responses.
 
-import React, { useRef, useEffect, ChangeEvent } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { BACKEND_URL } from '../constants/constant';
-import { toast } from 'react-toastify';
+import React, { useRef, useEffect, ChangeEvent, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { BACKEND_URL } from "../constants/constant";
+import { toast } from "react-toastify";
+import LoadingBar from "react-top-loading-bar";
 
 const FileUploadForm = () => {
   const fileInputRef = useRef(null);
   const controllerRef = useRef(new AbortController());
+  const [loading, setLoading] = useState(false);
   const router = useNavigate();
 
   useEffect(() => {
@@ -18,22 +20,24 @@ const FileUploadForm = () => {
   }, []);
 
   const handleFileChange = async (e) => {
+    setLoading(true);
+
     // Abort the previous request before starting a new one
     controllerRef.current.abort();
 
     const selectedFile = e.target.files && e.target.files[0];
 
     // Perform PDF validation
-    if (selectedFile && selectedFile.type === 'application/pdf') {
+    if (selectedFile && selectedFile.type === "application/pdf") {
       const formData = new FormData();
-      formData.set('pdf', selectedFile);
+      formData.set("pdf", selectedFile);
 
       // Create a new AbortController for the current request
       controllerRef.current = new AbortController();
 
       try {
         const response = await fetch(`${BACKEND_URL}/pdf/upload`, {
-          method: 'POST',
+          method: "POST",
           body: formData,
           signal: controllerRef.current.signal,
         });
@@ -41,21 +45,23 @@ const FileUploadForm = () => {
         const data = await response.json();
 
         if (response.ok) {
-          toast.success('File uploaded successfully');
+          toast.success("File uploaded successfully");
           router(`view-pdf/${data?.fileWithOutExtension}`);
         } else {
           throw new Error(`File upload failed: ${data.message}`);
         }
       } catch (error) {
-        if (error.name === 'AbortError') {
+        if (error.name === "AbortError") {
           // Handle abort (e.g., don't display an error message)
         } else {
           toast.error(`File upload failed: ${error.message}`);
         }
+      } finally {
+        setLoading(false);
       }
     } else {
       // Handle invalid file type (not a PDF)
-      toast.error('Please select a valid PDF file.');
+      toast.error("Please select a valid PDF file.");
     }
   };
 
@@ -66,6 +72,7 @@ const FileUploadForm = () => {
 
   return (
     <section className="bg-gray-100 h-56 mt-20">
+      <LoadingBar color="#f11946" progress={loading ? 50 : 0} height={6} />
       <div className="text-center text-2xl sm:text-4xl px-2 py-5">
         <h1 className="font-extrabold text-black">Split PDF</h1>
       </div>

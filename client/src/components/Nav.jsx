@@ -8,7 +8,6 @@ import React from "react";
 
 const Navbar = () => {
   const [isOpen, setOpen] = useState(false);
- 
   const titles= [
     {
       title: "Pricing",
