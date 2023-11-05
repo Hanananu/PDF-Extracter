@@ -19,17 +19,25 @@ PDF Forge is a web application that enables users to extract and manipulate PDF 
 
   - Easily upload PDF files for processing.
 
+  ![Landing Page](https://res.cloudinary.com/djlzfhwqo/image/upload/v1699183778/HomePage_qve3vj.png)
+
+
 - **Page Preview:**
 
   - Visualize each page through an intuitive interface.
+
+  ![Preview](https://res.cloudinary.com/djlzfhwqo/image/upload/v1699184091/Viewpdf_pedam3.png)
 
 - **Selective Extraction:**
 
   - Choose specific pages for extraction using checkboxes.
 
+   ![Select Page](https://res.cloudinary.com/djlzfhwqo/image/upload/v1699184134/Extract_Button_k0kkvx.png)
 - **Page Inspection:**
 
   - View detailed, full-page content through a modal interface.
+
+  ![Single Page](https://res.cloudinary.com/djlzfhwqo/image/upload/v1699184110/Single_Page_View_t5qqac.png)
 
 - **Individual Page Downloads:**
 
@@ -45,6 +53,9 @@ PDF Forge is a web application that enables users to extract and manipulate PDF 
 
 - **Seamless PDF Viewing:**
   - Redirect users to a sophisticated PDF viewer for comprehensive viewing.
+
+   ![Extracted Pdf and View](https://res.cloudinary.com/djlzfhwqo/image/upload/v1699184142/Extracted_pdf_and_download_cts4np.png)
+  
 
 ## How to Use
 
