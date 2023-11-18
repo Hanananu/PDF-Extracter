@@ -57,7 +57,7 @@ const ViewPdf = () => {
   
 
   return (
-    <div className="bg-gray-100 h-[480px] mt-20">
+    <div className="bg-gray-100  mt-20">
       <Suspense fallback={<div>Loading...</div>}>
         {pdfUrl && <FileConverter pdfUrl={pdfUrl} fileName={fileName} />}
       </Suspense>

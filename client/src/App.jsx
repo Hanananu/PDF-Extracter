@@ -11,7 +11,6 @@ const App = () => {
       <ErrorBoundary>
         <Nav />
         <Outlet />
-        <Footer />
       </ErrorBoundary>
     </>
   );

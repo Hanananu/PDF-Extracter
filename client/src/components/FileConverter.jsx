@@ -99,7 +99,7 @@ function FileConverter({ pdfUrl, fileName }) {
   };
 
   return (
-    <div className="px-2 py-4 text-center overflow-y-scroll  max-h-[480px] ">
+    <div className="px-2 py-4 text-center  ">
       {loading ? (
         <Loader loading={loading} />
       ) : (

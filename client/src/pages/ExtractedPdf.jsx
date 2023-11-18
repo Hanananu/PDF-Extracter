@@ -20,7 +20,7 @@ const ExtractedPdf = () => {
   }
   return (
      
-    <div className="max-w-full h-[450px] mt-20 ">
+    <div className="max-w-full  mt-20 bg-gray-100 ">
       <Worker
         workerUrl={`https://unpkg.com/pdfjs-dist@latest/build/pdf.worker.min.js`}
       >
