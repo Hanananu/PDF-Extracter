@@ -22,7 +22,7 @@ const ExtractedPdf = () => {
      
     <div className="max-w-full  mt-20 bg-gray-100 ">
       <Worker
-        workerUrl={`https://unpkg.com/pdfjs-dist@latest/build/pdf.worker.min.js`}
+        workerUrl={`https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.min.js`}
       >
         <div className="w-full  overflow-y-auto">
         {blobUrl && (

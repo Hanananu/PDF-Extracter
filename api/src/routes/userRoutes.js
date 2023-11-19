@@ -6,6 +6,7 @@ const router = Router();
 
 router.post("/login", userController.login);
 router.post("/signup", userController.signup);
-router.post("/logout", authenticateJWT, userController.logout);
+router.get("/profile",authenticateJWT,userController.profile)
+router.get("/logout", authenticateJWT, userController.logout);
 
 export default router;

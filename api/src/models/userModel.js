@@ -2,9 +2,20 @@ import mongoose from "mongoose";
 import bcrypt from "bcrypt";
 
 const userSchema = new mongoose.Schema({
-  username: String,
-  email: String,
-  password: String,
+  username: {
+    type: String,
+    unique: true,
+    required: [true, 'Username is required'],
+  },
+  email: {
+    type: String,
+    unique: true,
+    required: [true, 'Email is required'],
+  },
+  password: {
+    type: String,
+    required: [true, 'Password is required'],
+  },
 });
 
 // Hash password before saving to database

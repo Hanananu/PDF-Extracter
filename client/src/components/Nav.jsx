@@ -1,14 +1,15 @@
-import {Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 import NavLink from "./NavLink";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/solid";
 import { useState } from "react";
 import MobileOverLay from "./MobileOverLay";
+import { useUserData } from "../context/UserContext";
 import React from "react";
 
-
 const Navbar = () => {
+  const { user } = useUserData();
   const [isOpen, setOpen] = useState(false);
-  const titles= [
+  const titles = [
     {
       title: "Pricing",
       path: "#pricing",
@@ -17,19 +18,18 @@ const Navbar = () => {
       title: "Teams",
       path: "#teams",
     },
+
     {
-      title: "Log In",
-      path: "login",
+      title: user?.username ? `${user?.username}` : "Log In",
+      path: user?.username ? `/userprofile/${user?.username}` : "login",
     },
   ];
 
   return (
     <nav className="fixed top-0 left-0 right-0 bg-gray-100 opacity-100 shadow-md z-40">
       <div className="flex flex-wrap items-center justify-between  px-10 py-5">
-        <Link
-          to={"/"}
-          className="font-semibold sm:text-4xl text-lg text-black"
-        >PDF FORGE
+        <Link to={"/"} className="font-semibold sm:text-4xl text-lg text-black">
+          PDF FORGE
         </Link>
         <div className="mobile-menu block md:hidden">
           {isOpen ? (

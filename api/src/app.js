@@ -1,5 +1,7 @@
 import express from "express";
 import bodyParser from "body-parser";
+import cookieParser from "cookie-parser";
+
 import cors from "cors";
 import morgan from "morgan";
 import helmet from "helmet"; // Added Helmet for enhanced security headers
@@ -16,9 +18,11 @@ const app = express();
 connectDB();
 
 // Middleware
+app.use(cookieParser());
 app.use(helmet()); // Use Helmet middleware for enhanced security headers
 app.use(
   cors({
+    credentials: true,
     origin: process.env.ORIGIN,
     methods: ["GET", "POST", "PUT", "DELETE"], // Specify allowed methods
   })

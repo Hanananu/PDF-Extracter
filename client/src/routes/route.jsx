@@ -46,7 +46,7 @@ const clientRoutes = {
       ),
     },
     {
-      path: 'user/:username',
+      path: 'userprofile/:username',
       element: (
         <Suspense fallback={<div>Loading...</div>}>
           <UserProfile />

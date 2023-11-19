@@ -1,42 +1,50 @@
-import React from "react";
-import { Formik, Field, ErrorMessage } from "formik";
-import { toast, ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import React, { useEffect } from "react";
+import { useNavigate, Link } from "react-router-dom";
+import { Formik, Field, ErrorMessage, Form } from "formik";
+import { toast } from "react-toastify";
+import { BACKEND_URL } from "../constants/constant";
+import { useUserData } from "../context/UserContext";
 
 const SignupPage = () => {
   const [loading, setLoading] = React.useState(false);
+  const router = useNavigate();
+  const { user, setUser } = useUserData();
 
-  const handleSubmit = async (values) => {
+  useEffect(() => {
+    if (user) return router("/");
+  }, []);
+
+  async function handleSubmit(values) {
     setLoading(true);
 
     try {
-      const response = await fetch("your-signup-api-endpoint", {
+      const response = await fetch(`${BACKEND_URL}/user/signup`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(values),
+        credentials: "include",
       });
 
       const data = await response.json();
-
       if (response.ok) {
-        toast.success("Signup successful!"); // Show success message
-        // Handle other success actions, e.g., redirect to login page
+        toast.success(data?.message);
+        setUser(data?.response);
+        router("/");
       } else {
         throw new Error(data.message || "Signup failed.");
       }
     } catch (error) {
-      console.error("Signup Error:", error);
       toast.error(`Error: ${error.message || "Something went wrong."}`); // Show error message
     } finally {
       setLoading(false);
     }
-  };
+  }
 
   return (
-    <div className="bg-gray-200 h-screen overflow-hidden flex items-center justify-center">
-      <div className="bg-white lg:w-5/12 md:6/12 w-10/12 shadow-3xl">
+    <div className="bg-gray-100 h-screen  flex items-center justify-center overflow-y-scroll">
+      <div className="bg-white lg:w-5/12 md:6/12 w-10/12 shadow-3xl ">
         <div className="text-black bg-gray-200 text-center py-4 font-bold text-2xl">
           PDF FORGE
         </div>
@@ -66,7 +74,7 @@ const SignupPage = () => {
           onSubmit={handleSubmit}
         >
           {({ isSubmitting }) => (
-            <form className="p-6 md:p-12">
+            <Form className="p-6 md:p-12">
               <div className="flex flex-col items-center text-lg mb-2 md:mb-4">
                 <label htmlFor="username" className="mr-2">
                   Username
@@ -127,10 +135,15 @@ const SignupPage = () => {
               >
                 {loading ? "Signing up..." : "Signup"}
               </button>
-            </form>
+            </Form>
           )}
         </Formik>
-        <ToastContainer />
+        <div className="text-right text-black font-semibold px-2 py-2">
+          Have an account
+          <Link to={"/login"} className="font-bold p-1">
+            Login
+          </Link>
+        </div>
       </div>
     </div>
   );

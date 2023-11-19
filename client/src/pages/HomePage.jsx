@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import FileUploadForm from '../components/FileUploadForm';
-import Summary from '../components/Summary';
-import Loader from "../components/Loader"
+import React, { useState, useEffect } from "react";
+import FileUploadForm from "../components/FileUploadForm";
+import Summary from "../components/Summary";
+import Loader from "../components/Loader";
+
 
 const HomePage = () => {
   const [loading, setLoading] = useState(true);
