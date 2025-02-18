@@ -6,7 +6,10 @@ const url = process.env.MONGO_URL;
 
 const connectDB = async () => {
   try {
-    await mongoose.connect(url);
+    await mongoose.connect(url , {
+      useNewUrlParser: true,
+      useUnifiedTopology: true
+    });
   } catch (err) {
     console.error(err);
     process.exit(1);
