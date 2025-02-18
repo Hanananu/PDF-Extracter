@@ -18,8 +18,8 @@ const userController = {
       }
 
       // If not, create a new user
-     const newUser = new User({ username, email, password });
-     const response= await newUser.save();
+      const newUser = new User({ username, email, password });
+      const response = await newUser.save();
 
       const token = await generateAuthToken(newUser);
       // Set the token in the browser cookie
@@ -28,13 +28,16 @@ const userController = {
           httpOnly: true,
           secure: true,
         })
-        .json({response, message: "User registered successfully." });
+        .json({ response, message: "User registered successfully." });
     } catch (error) {
+      console.log(error);
+
       res.status(500).json({ message: "Internal Server Error" });
     }
   },
 
   login: async (req, res) => {
+
     try {
       const { email, password } = req.body;
       const user = await User.findOne({ email });
@@ -48,19 +51,21 @@ const userController = {
       // Set the token in the browser cookie
       return res
         .cookie("token", token, { httpOnly: true, secure: true })
-        .json({user, message: "Login successful." });
+        .json({ user, message: "Login successful." });
     } catch (error) {
-      res.status(500).json({ error: "Internal Server Error" });
+      console.log(error);
+
+      // res.status(500).json({ error: "Internal Server Error" });
     }
   },
 
-  profile:async(req,res)=>{
-   try {
-    const user =req?.user
-    res.json({user})
-  } catch (error) {
-    res.status(500).json({ error: "Internal Server Error" });
-  }
+  profile: async (req, res) => {
+    try {
+      const user = req?.user
+      res.json({ user })
+    } catch (error) {
+      res.status(500).json({ error: "Internal Server Error" });
+    }
   },
 
   logout: async (req, res) => {

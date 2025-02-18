@@ -19,7 +19,7 @@ connectDB();
 
 // Middleware
 app.use(cookieParser());
-app.use(helmet()); // Use Helmet middleware for enhanced security headers
+// app.use(helmet()); // Use Helmet middleware for enhanced security headers
 app.use(
   cors({
     credentials: true,
@@ -29,10 +29,11 @@ app.use(
 );
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(morgan("short"));
+app.use(morgan("dev"));
 
 // Routes
 app.use("/api/user", userRoutes);
 app.use("/api/pdf", pdfRoutes);
+
 
 export default app;
